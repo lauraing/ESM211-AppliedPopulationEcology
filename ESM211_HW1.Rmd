@@ -1,0 +1,184 @@
+---
+title: "ESM 211 - Homework 1"
+author: "Laura Ingulsrud"
+date: "January 17, 2020"
+output:
+  html_document:
+    df_print: paged
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages, include=FALSE}
+
+# Load necessary packages
+library(tidyverse)
+
+```
+
+&nbsp;
+&nbsp;
+####1. 
+
+###**Eureka dune grass**
+
+####2.
+
+```{r swalleniadata, include=FALSE}
+
+# Read in data for Eureka dune grass (Swallenia alexandrae) on Saline Dune
+swallenia <- read.csv("Swallenia.csv")
+
+# Use two-sample t-test to assess whether and how mean abundance changed from 2009 to 2010
+swallenia_t <- t.test(swallenia$count_2009, swallenia$count_2010, var.equal = TRUE)
+
+swallenia_t
+
+```
+
+A significance level of 0.05 was chosen for $\alpha$ because it indicates a 5% risk of concluding a difference in mean abundance exists, when there actually is no difference in mean abundance of Eureka dune grass between the two years. There is a 0.05 probability that a Type I error will be committed (the null hypothesis is true, and we reject it).
+
+Eureka dune grass mean abundance on Saline Dune between 2009 and 2010 did not differ significantly (p = `r round(swallenia_t$p.value, 2)`, $\alpha$ = 0.05). 
+
+####3.
+
+```{r}
+
+# Do a paired t-test
+swallenia_tpaired <- t.test(swallenia$count_2009, swallenia$count_2010, paired = TRUE)
+
+swallenia_tpaired
+
+```
+
+The true difference in means between Eureka dune grass abundance on Saline Dune between 2009 and 2010 is not equal to 0; therefore, the change in abundance differed significantly (p = `r round(swallenia_tpaired$p.value, 2)`, $\alpha$ = 0.05).
+
+####4. The paired t-test (second analyses) is more appropriate because there is a one-to-one relationship between values in the two Eureka dune grass samples from 2009 and 2010. Since plants were counted in 11 quadrats across the dune, the counts were from the same locations between 2009 and 2010. Since Eureka dune grass spreads outward from itself, it likely exhibits clumped dispersion, and so the quadrats can be expected to capture plant abundance year to year.
+
+####5. 
+
+
+###**Yellowstone grizzly bears**
+
+####6. 
+
+```{r grizzlydata}
+
+# Read in grizzly data
+grizzlydata <- read.csv("grizzlydata.csv")
+
+# Did the grizzly bear population decline over the period of 1959 - 1968?
+
+# Filter grizzly data to only include years 1959 - 1968
+grizzly1959_1968 <- grizzlydata %>% 
+  filter(between(Year, 1959, 1968))
+  
+grizzly1959_1968_summarize <- grizzly1959_1968 %>% 
+  summarize(
+    mean1959_1968 = round(mean(N), 2), # Mean = 43.6
+    sd1959_1968 = sd(mean(N), 2), # SD = NA
+    samplesize1959_1968 = length(N), # Sample size = 10
+  )
+
+# Create exploratory histogram
+grizzly1959_1968_hist <- ggplot(grizzly1959_1968, aes(x = N)) + 
+  geom_histogram(bins = 10) +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    theme_classic() +
+    theme(text = element_text(family = "Times New Roman")) +
+    theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+    theme(legend.position="none") +
+    theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(colour = "black"))
+
+grizzly1959_1968_hist
+
+# Create exploratory quantile quantile plot
+grizzly1959_1968_qq <- ggplot(grizzly1959_1968, aes(sample = N)) + 
+  geom_qq() +
+  theme_classic() +
+  theme(legend.position="none") +
+  theme(text = element_text(family = "Times New Roman")) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+grizzly1959_1968_qq
+
+# Create exploratory scatterplot
+gg_grizzly1959_1968 <- ggplot(grizzly1959_1968, aes(x = Year, y = N)) +
+  geom_point()
+
+gg_grizzly1959_1968
+# Overall, it looks like the trend is generally a negative linear relationship. However, it seems the population was relatively stable from 1959 to 1965, but it drastically declined after 1965.
+
+# Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
+grizzly1959_1968_model <- lm(N ~ Year, data = grizzly1959_1968)
+
+grizzly1959_1968_model
+# Grizzly population = 1543 - 0.76(Year)
+
+# View model diagnostics
+par(mfrow = c(2,2))
+plot(grizzly1959_1968_model)
+
+# Explore model fit and signifiance
+summary(grizzly1959_1968_model)
+
+```
+
+
+####7. 
+
+```{r}
+
+# Filter grizzly data to only include years 1969 - 1978
+grizzly1969_1978 <- grizzlydata %>% 
+  filter(between(Year, 1969, 1978))
+
+# Create exploratory scatterplot
+gg_grizzly1969_1978 <- ggplot(grizzly1969_1978, aes(x = Year, y = N)) +
+  geom_point()
+
+gg_grizzly1969_1978
+# Overall, it looks like the trend is generally a negative linear relationship. However, there are some outliers on both ends.
+
+# Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
+grizzly1969_1978_model <- lm(N ~ Year, data = grizzly1969_1978)
+
+grizzly1969_1978_model
+# Grizzly population = 1532.38 - 0.76(Year)
+
+```
+
+
+####8. 
+
+```{r}
+
+# Filter grizzly data to only include years 1978 - 1997
+grizzly1978_1997 <- grizzlydata %>% 
+  filter(between(Year, 1978, 1997))
+
+# Create exploratory scatterplot
+gg_grizzly1978_1997 <- ggplot(grizzly1978_1997, aes(x = Year, y = N)) +
+  geom_point()
+
+gg_grizzly1978_1997
+# Overall, it looks like the trend is generally a positive linear relationship.
+
+# Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
+grizzly1978_1997_model <- lm(N ~ Year, data = grizzly1978_1997)
+
+grizzly1978_1997_model
+# Grizzly population = -6043.13 + 3.07(Year)
+
+```
+
+
+####9. 
