@@ -39,7 +39,7 @@ swallenia_t
 
 ```
 
-A significance level of 0.05 was chosen for $\alpha$ because it indicates a 5% risk of concluding a difference in mean abundance exists, when there actually is no difference in mean abundance of Eureka dune grass between the two years. There is a 0.05 probability that a Type I error will be committed (the null hypothesis is true, and we reject it).
+A significance level of 0.05 was chosen for $\alpha$ because it indicates a 5% risk of concluding a difference in mean abundance exists, when there actually is no difference in mean abundance of Eureka dune grass between the two years. There is a 0.05 probability that a Type I error will be committed (the null hypothesis is true, and we reject it). A significance level of 0.05 is common in hypothesis testing.
 
 Eureka dune grass mean abundance on Saline Dune between 2009 and 2010 did not differ significantly (p = `r round(swallenia_t$p.value, 2)`, $\alpha$ = 0.05). 
 
@@ -121,6 +121,7 @@ gg_grizzly1959_1968
 grizzly1959_1968_model <- lm(N ~ Year, data = grizzly1959_1968)
 
 grizzly1959_1968_model
+# y = 1543 - 0.76x
 # Grizzly population = 1543 - 0.76(Year)
 
 # View model diagnostics
@@ -129,6 +130,16 @@ plot(grizzly1959_1968_model)
 
 # Explore model fit and signifiance
 summary(grizzly1959_1968_model)
+
+# Prepare final graph of the linear regression model with the original data, model, and 95% confidence interval for predictions
+grizzly1959_1968_graph <- ggplot(grizzly1959_1968, aes(x = Year, y = N)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  theme_bw() +
+  scale_x_continuous(expand = c(0,0), limits = c(1958, 1969)) +
+  labs(x = "Year", y = "Yellowstone Grizzly Bear Population")
+
+grizzly1959_1968_graph
 
 ```
 
@@ -154,6 +165,16 @@ grizzly1969_1978_model <- lm(N ~ Year, data = grizzly1969_1978)
 grizzly1969_1978_model
 # Grizzly population = 1532.38 - 0.76(Year)
 
+# Prepare final graph of the linear regression model with the original data, model, and 95% confidence interval for predictions
+grizzly1969_1978_graph <- ggplot(grizzly1969_1978, aes(x = Year, y = N)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  theme_bw() +
+  scale_x_continuous(expand = c(0,0), limits = c(1968, 1979)) +
+  labs(x = "Year", y = "Yellowstone Grizzly Bear Population")
+
+grizzly1969_1978_graph
+
 ```
 
 
@@ -177,6 +198,16 @@ grizzly1978_1997_model <- lm(N ~ Year, data = grizzly1978_1997)
 
 grizzly1978_1997_model
 # Grizzly population = -6043.13 + 3.07(Year)
+
+# Prepare final graph of the linear regression model with the original data, model, and 95% confidence interval for predictions
+grizzly1978_1997_graph <- ggplot(grizzly1978_1997, aes(x = Year, y = N)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  theme_bw() +
+  scale_x_continuous(expand = c(0,0), limits = c(1977, 1998)) +
+  labs(x = "Year", y = "Yellowstone Grizzly Bear Population")
+
+grizzly1978_1997_graph
 
 ```
 
