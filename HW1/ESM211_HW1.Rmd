@@ -8,6 +8,18 @@ output:
     theme: cosmo
 ---
 
+<style>
+h1.title{
+    text-align: center
+  }
+h4.author{
+    text-align: center
+  }
+h4.date{
+    text-align: center
+  }
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -21,13 +33,24 @@ library(tidyverse)
 
 &nbsp;
 &nbsp;
-####1. 
 
-###**Eureka dune grass**
+####1. Give three reasons why a plant or animal might be patchily distributed like this. For each, describe whether you would expect the location of the high-density patches to be consistent from year to year.
 
-####2.
+This figure shows a pattern of clumped dispersion, in which individuals of a population are clustered in groups.
 
-```{r swalleniadata, include=FALSE}
+1. The high-density patches could be in areas of suitable habitat. For an animal population, the high-density patches might be locations of abundant food or safety from predators. For a plant population, the high-density patches might be or areas of optimal soil nutrients, water, and sunlight. Depending on how suitable habitat patches increase, decrease, or move spatially, the species would be expected to follow this pattern.
+
+2. For plants, it could be a plant species that spreads outward from itself, or drops its seeds straight to the ground, rather than its seeds being dispersed more widely. This type of plant species would remain in clusters. In this situation, the location of these patches would be expected to be consistent from year to year.
+
+3. For animals, it could be an animal species that lives in groups, such as herds of elephants. For this situation, whether the location of these patches remains consistent from year to year depends on the reason for the animals groups’ locations. For example, if they are grouped in areas of high food availability, location constancy depends on whether those areas remain rich in food or not.
+
+&nbsp;
+
+##Eureka dune grass
+
+####2. Read in the data, and use a two-sample t-test (e.g., using t.test() in R) to assess whether and how mean abundance changed from 2009 to 2010. Choose a level for α, and justify your choice. On the basis of this analysis, what do you conclude about the change in the grass’s abundance?
+
+```{r swalleniadata}
 
 # Read in data for Eureka dune grass (Swallenia alexandrae) on Saline Dune
 swallenia <- read.csv("Swallenia.csv")
@@ -43,7 +66,9 @@ A significance level of 0.05 was chosen for $\alpha$ because it indicates a 5% r
 
 Eureka dune grass mean abundance on Saline Dune between 2009 and 2010 did not differ significantly (p = `r round(swallenia_t$p.value, 2)`, $\alpha$ = 0.05). 
 
-####3.
+&nbsp;
+
+####3. Because the plant was counted in the same plots each year, you can also do a paired t-test (R hint: use paired = TRUE in t.test()). On the basis of this analysis, what do you conclude about the change in the grass’s abundance?
 
 ```{r}
 
@@ -56,14 +81,21 @@ swallenia_tpaired
 
 The true difference in means between Eureka dune grass abundance on Saline Dune between 2009 and 2010 is not equal to 0; therefore, the change in abundance differed significantly (p = `r round(swallenia_tpaired$p.value, 2)`, $\alpha$ = 0.05).
 
-####4. The paired t-test (second analyses) is more appropriate because there is a one-to-one relationship between values in the two Eureka dune grass samples from 2009 and 2010. Since plants were counted in 11 quadrats across the dune, the counts were from the same locations between 2009 and 2010. Since Eureka dune grass spreads outward from itself, it likely exhibits clumped dispersion, and so the quadrats can be expected to capture plant abundance year to year.
+&nbsp;
 
-####5. 
+####4. Which of these analyses is more appropriate? Why? (Hint: think about your answers to question 1, and whether any apply here).
 
+The paired t-test (second analyses) is more appropriate because there is a one-to-one relationship between values in the two Eureka dune grass samples from 2009 and 2010. Since plants were counted in 11 quadrats across the dune, the counts were from the same locations between 2009 and 2010. Since Eureka dune grass spreads outward from itself, it likely exhibits clumped dispersion, and so the quadrats can be expected to capture plant abundance year to year.
 
-###**Yellowstone grizzly bears**
+&nbsp;
 
-####6. 
+####5. Write a short paragraph to the park superintendent describing your finding about the changes (if any) to the dune grass population.
+
+&nbsp;
+
+###Yellowstone grizzly bears
+
+####6. Open the file, and look at the data from 1959 to 1968. Did the grizzly bear population decline over this period? Support your conclusion with graphs, statistics, and logical reasoning.
 
 ```{r grizzlydata}
 
@@ -143,8 +175,9 @@ grizzly1959_1968_graph
 
 ```
 
+&nbsp;
 
-####7. 
+####7. Select the data from 1969 to 1978. Did the population continue to decline? Was the decline faster than the period prior to the dump closures?
 
 ```{r}
 
@@ -177,8 +210,9 @@ grizzly1969_1978_graph
 
 ```
 
+&nbsp;
 
-####8. 
+####8. Finally look at the data after 1978. Did population size continue to change? What was the direction and magnitude of the trend?
 
 ```{r}
 
@@ -211,5 +245,6 @@ grizzly1978_1997_graph
 
 ```
 
+&nbsp;
 
-####9. 
+####9. Write a short paragraph to the park superintendent describing your conclusions on the effects (if any) of the dump closures on the grizzly bear population.
