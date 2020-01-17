@@ -40,7 +40,6 @@ library(broom)
 This figure shows a pattern of clumped dispersion, in which individuals of a population are clustered in groups.
 
 1. The high-density patches could be in areas of suitable habitat. For an animal population, the high-density patches might be locations of abundant food or safety from predators. For a plant population, the high-density patches might be or areas of optimal soil nutrients, water, and sunlight. Depending on how suitable habitat patches increase, decrease, or move spatially, the species would be expected to follow this pattern.
-<<<<<<< HEAD
 
 2. For plants, it could be a plant species that spreads outward from itself, or drops its seeds straight to the ground, rather than its seeds being dispersed more widely. This type of plant species would remain in clusters. In this situation, the location of these patches would be expected to be consistent from year to year.
 
@@ -109,65 +108,49 @@ Eureka dune grass (Swallenia alexandrae), a rare bunchgrass that only grows on t
 
 ####6. Open the file, and look at the data from 1959 to 1968. Did the grizzly bear population decline over this period? Support your conclusion with graphs, statistics, and logical reasoning.
 
-```{r grizzlydata_1959-1968}
+```{r grizzlydata_1959-1968, warning=FALSE}
 
 # Read in grizzly data
 grizzlydata <- read.csv("grizzlydata.csv")
 
-# Did the grizzly bear population decline over the period of 1959 - 1968?
-
 # Filter grizzly data to only include years 1959 - 1968
 grizzly1959_1968 <- grizzlydata %>% 
   filter(between(Year, 1959, 1968))
-  
-grizzly1959_1968_summarize <- grizzly1959_1968 %>% 
-  summarize(
-    mean1959_1968 = round(mean(N), 2), # Mean = 43.6
-    sd1959_1968 = sd(mean(N), 2), # SD = NA
-    samplesize1959_1968 = length(N), # Sample size = 10
-  )
 
 # Create exploratory scatterplot
 gg_grizzly1959_1968 <- ggplot(grizzly1959_1968, aes(x = Year, y = N)) +
   geom_point()
-
-gg_grizzly1959_1968
 # It looks like the trend is generally a negative linear relationship. However, it seems the population was relatively stable from 1959 to 1965, but it drastically declined after 1965. Overall though, it looks like a linear relationship between grizzly bear population and year makes sense.
 
 # Run linear regression model to describe the trend in grizzly bear population from 1959 - 1968
 grizzly1959_1968_lm <- lm(N ~ Year, data = grizzly1959_1968)
-
 grizzly1959_1968_lm
 # y = -0.7636x + 1543
 # Grizzly population = -0.7636(Year) + 1543
 
-# Explore model fit and signifiance
+# Explore model fit and significance
 summary(grizzly1959_1968_lm)
 
 # Get model outputs in table form
 grizzly1959_1968_lm_tidy <- broom::tidy(grizzly1959_1968_lm)
-grizzly1959_1968_lm_tidy
 
 # Get the intercept:
 grizzly1959_1968_int <- grizzly1959_1968_lm_tidy$estimate[1]
-grizzly1959_1968_int
 # 1543
 
 # Get the Year coefficient:
 grizzly1959_1968_coef <- grizzly1959_1968_lm_tidy$estimate[2]
-grizzly1959_1968_coef
 # -0.7636
 
 # Metrics at a glance:
 grizzly1959_1968_lm_out <- broom::glance(grizzly1959_1968_lm)
-grizzly1959_1968_lm_out
 
 # Check diagnostic plots
-plot(grizzly1959_1968_lm)
+# plot(grizzly1959_1968_lm)
+# Looks ok (commented out for Rmarkdown)
 
 # Find Pearson's r for correlation:
 grizzly1959_1968_cor <- cor.test(grizzly1959_1968$N, grizzly1959_1968$Year)
-grizzly1959_1968_cor
 # r = -0.7462 (strong negative correlation)
 # Correlation is significantly non-zero (p = 0.01 < 0.05)
 
@@ -189,13 +172,13 @@ grizzly1959_1968_graph
 
 Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1959 and 1968. 
 
-The equation for the linear regression model is $Grizzly~Bear~Population = -0.7636*Year + 1543$.
+The equation for the linear regression model is *Grizzly Bear Population = -0.7636(Year) + 1543*.
 
 A significant regression equation was found ($\beta$ = `r round(grizzly1959_1968_coef,3)`, F(`r grizzly1959_1968_lm_out$df`, `r grizzly1959_1968_lm_out$df.residual`) = `r round(grizzly1959_1968_lm_out$statistic,1)`, p = `r round(grizzly1959_1968_lm_out$p.value,2)`, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1959_1968_lm_out$r.squared,3)`. 
 
 There is a strong negative correlation between grizzly bear population and year (*r* = `r round(grizzly1959_1968_cor$estimate,2)`, t(`r grizzly1959_1968_cor$parameter`) = `r round(grizzly1959_1968_cor$statistic,2)`, p = 0.01, $\alpha$ = 0.05). 
 
-Therefore, the grizzly bear population declined from 1959-1968 at an average rate of -0.7636 bears per year.
+The linear regression model shows that the grizzly bear population declined at a statistically significant rate of -0.7636 bears per year from 1959 to 1968 ($\sigma$ = `r round(grizzly1959_1968_lm_out$sigma,2)`, p = `r round(grizzly1959_1968_lm_out$p.value,2)`, $\alpha$ = 0.05).
 
 &nbsp;
 
@@ -210,8 +193,6 @@ grizzly1969_1978 <- grizzlydata %>%
 # Create exploratory scatterplot
 gg_grizzly1969_1978 <- ggplot(grizzly1969_1978, aes(x = Year, y = N)) +
   geom_point()
-
-gg_grizzly1969_1978
 # Overall, it looks like the trend is generally a negative linear relationship. However, there are some outliers on both ends.
 
 # Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
@@ -225,42 +206,28 @@ summary(grizzly1969_1978_lm)
 
 # Get model outputs in table form
 grizzly1969_1978_lm_tidy <- broom::tidy(grizzly1969_1978_lm)
-grizzly1969_1978_lm_tidy
 
 # Get the intercept:
 grizzly1969_1978_int <- grizzly1969_1978_lm_tidy$estimate[1]
-grizzly1969_1978_int
 # 1532.376
 
 # Get the Year coefficient:
 grizzly1969_1978_coef <- grizzly1969_1978_lm_tidy$estimate[2]
-grizzly1969_1978_coef
 # -0.7575758
 
 # Metrics at a glance:
 grizzly1969_1978_lm_out <- broom::glance(grizzly1969_1978_lm)
-grizzly1969_1978_lm_out
 
 # Check diagnostic plots
-plot(grizzly1969_1978_lm)
+# plot(grizzly1969_1978_lm)
+# Looks ok (commented out for RMarkdown)
 
 # Find Pearson's r for correlation:
 grizzly1969_1978_cor <- cor.test(grizzly1969_1978$N, grizzly1969_1978$Year)
-grizzly1969_1978_cor
 # r = -0.701926 (strong negative correlation)
 # Correlation is significantly non-zero (p = 0.02 < 0.05)
 
 ```
-
-Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1969 and 1978. 
-
-The equation for the linear regression model is $Grizzly~Bear~Population = -0.7576*Year + 1532$.
-
-A significant regression equation was found ($\beta$ = `r round(grizzly1969_1978_coef,3)`, F(`r grizzly1969_1978_lm_out$df`, `r grizzly1969_1978_lm_out$df.residual`) = `r round(grizzly1969_1978_lm_out$statistic,1)`, p = `r round(grizzly1969_1978_lm_out$p.value,2)`, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1969_1978_lm_out$r.squared,3)`. 
-
-There is a strong negative correlation between grizzly bear population and year (*r* = `r round(grizzly1959_1968_cor$estimate,2)`, t(`r grizzly1959_1968_cor$parameter`) = `r round(grizzly1959_1968_cor$statistic,2)`, p = 0.02, $\alpha$ = 0.05). 
-
-Therefore, the grizzly bear population continued to decline from 1969 to 1978 at an average rate of -0.7576 bears per year. The rate of decline (-0.7576 bears per year) was slightly slower than the period prior to the dump closures (-0.7636 bears per year).
 
 ```{r grizzlygraph2}
 
@@ -276,6 +243,16 @@ grizzly1969_1978_graph
 
 ```
 
+Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1969 and 1978. 
+
+The equation for the linear regression model is: *Grizzly Bear Population = -0.7576(Year) + 1532*.
+
+A significant regression equation was found ($\beta$ = `r round(grizzly1969_1978_coef,3)`, F(`r grizzly1969_1978_lm_out$df`, `r grizzly1969_1978_lm_out$df.residual`) = `r round(grizzly1969_1978_lm_out$statistic,1)`, p = `r round(grizzly1969_1978_lm_out$p.value,2)`, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1969_1978_lm_out$r.squared,3)`. 
+
+There is also a strong negative correlation between grizzly bear population and year (*r* = `r round(grizzly1959_1968_cor$estimate,2)`, t(`r grizzly1959_1968_cor$parameter`) = `r round(grizzly1959_1968_cor$statistic,2)`, p = 0.02, $\alpha$ = 0.05). 
+
+The linear regression model shows that the grizzly bear population continued to decline at a statistically significant rate of -0.7576 bears per year from 1969 to 1978 ($\sigma$ = `r round(grizzly1969_1978_lm_out$sigma,2)`, p = `r round(grizzly1969_1978_lm_out$p.value,2)`, $\alpha$ = 0.05). The rate of decline (-0.7576 bears per year) was slightly slower than the period prior to the dump closures (-0.7636 bears per year).
+
 &nbsp;
 
 ####8. Finally look at the data after 1978. Did population size continue to change? What was the direction and magnitude of the trend?
@@ -289,8 +266,6 @@ grizzly1978_1997 <- grizzlydata %>%
 # Create exploratory scatterplot
 gg_grizzly1978_1997 <- ggplot(grizzly1978_1997, aes(x = Year, y = N)) +
   geom_point()
-
-gg_grizzly1978_1997
 # Overall, it looks like the trend is generally a positive linear relationship.
 
 # Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
@@ -304,42 +279,28 @@ summary(grizzly1978_1997_lm)
 
 # Get model outputs in table form
 grizzly1978_1997_lm_tidy <- broom::tidy(grizzly1978_1997_lm)
-grizzly1978_1997_lm_tidy
 
 # Get the intercept:
 grizzly1978_1997_int <- grizzly1978_1997_lm_tidy$estimate[1]
-grizzly1978_1997_int
 # -6043.126
 
 # Get the Year coefficient:
 grizzly1978_1997_coef <- grizzly1978_1997_lm_tidy$estimate[2]
-grizzly1978_1997_coef
 # 3.069925
 
 # Metrics at a glance:
 grizzly1978_1997_lm_out <- broom::glance(grizzly1978_1997_lm)
-grizzly1978_1997_lm_out
 
 # Check diagnostic plots
-plot(grizzly1978_1997_lm)
+# plot(grizzly1978_1997_lm)
+# Looks good (commented out for RMarkdown)
 
 # Find Pearson's r for correlation:
 grizzly1978_1997_cor <- cor.test(grizzly1978_1997$N, grizzly1978_1997$Year)
-grizzly1978_1997_cor
 # r = 0.9243827 (strong positive correlation)
 # Correlation is significantly non-zero (p < 0.001 < 0.05)
 
 ```
-
-Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1978 and 1997. 
-
-The equation for the linear regression model is $Grizzly~Bear~Population = 3.07*Year - 6043$.
-
-A significant regression equation was found ($\beta$ = `r round(grizzly1978_1997_coef,3)`, F(`r grizzly1978_1997_lm_out$df`, `r grizzly1978_1997_lm_out$df.residual`) = `r round(grizzly1978_1997_lm_out$statistic,1)`, p < 0.001, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1978_1997_lm_out$r.squared,3)`. 
-
-There is a strong positive correlation between grizzly bear population and year (*r* = `r round(grizzly1978_1997_cor$estimate,2)`, t(`r grizzly1978_1997_cor$parameter`) = `r round(grizzly1978_1997_cor$statistic,2)`, p < 0.001, $\alpha$ = 0.05). 
-
-Therefore, the grizzly bear population increased from 1978 to 1997 at an average rate of 3.07 bears per year.
 
 ```{r grizzlygraph3}
 
@@ -347,16 +308,26 @@ Therefore, the grizzly bear population increased from 1978 to 1997 at an average
 grizzly1978_1997_graph <- ggplot(grizzly1978_1997, aes(x = Year, y = N)) +
   geom_point() +
   geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
-  theme_bw() +
   scale_x_continuous(expand = c(0,0), limits = c(1977, 1998)) +
-  labs(x = "Year", y = "Yellowstone Population of Female Grizzly Bears with Cubs")
+  labs(x = "Year", y = "Yellowstone Population of Female Grizzly Bears with Cubs") +
+  theme_bw()
 
 grizzly1978_1997_graph
 
 ```
 
+Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1978 and 1997. 
+
+The equation for the linear regression model is *Grizzly Bear Population = 3.07(Year) - 6043*.
+
+A significant regression equation was found ($\beta$ = `r round(grizzly1978_1997_coef,3)`, F(`r grizzly1978_1997_lm_out$df`, `r grizzly1978_1997_lm_out$df.residual`) = `r round(grizzly1978_1997_lm_out$statistic,1)`, p < 0.001, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1978_1997_lm_out$r.squared,3)`. 
+
+There is also a strong positive correlation between grizzly bear population and year (*r* = `r round(grizzly1978_1997_cor$estimate,2)`, t(`r grizzly1978_1997_cor$parameter`) = `r round(grizzly1978_1997_cor$statistic,2)`, p < 0.001, $\alpha$ = 0.05). 
+
+The linear regression model shows that the grizzly bear population increased at a statistically significant rate of 3.07 bears per year from 1978 to 1997 ($\sigma$ = `r round(grizzly1978_1997_lm_out$sigma,2)`, p < 0.001, $\alpha$ = 0.05).
+
 &nbsp;
 
 ####9. Write a short paragraph to the park superintendent describing your conclusions on the effects (if any) of the dump closures on the grizzly bear population.
 
-During the 10 years prior to the dump closures, the grizzly bear population in Yellowstone National Park was declining at a statistically significant rate. During the 10 years following the first dump closures in 1968, the grizzly bear population continued to significantly decline, although at a slightly slower rate than before the dump closures. However, after 1978, 10 years after dump closures were implemented, the grizzly bear population has significantly increased. There could be a few reasons for these trends in grizzly bear population abundance.
+During the 10 years prior to the dump closures, the population of female grizzly bears with cubs in Yellowstone National Park was declining at a statistically significant rate. During the 10 years following the first dump closures in 1968, the grizzly bear population continued to significantly decline, although at a slightly slower rate than before the dump closures. However, after 1978, 10 years after dump closures were first implemented, the grizzly bear population has significantly increased. This indicates that the grizzly bear population’s declining trend was reversed by the dump closures, although it took around 10 years for the effects of the closures to be apparent. Closing the dumps could have had this positive impact on the grizzly bear population partly due to the subsequent reduction of human-bear interactions resulting in killing bears (Craighead and Craighead 1971). Further research is necessary to determine the causes of this population trend reversal, especially regarding bear fecundity rates before and after the dump closures (Stringham 1986).
