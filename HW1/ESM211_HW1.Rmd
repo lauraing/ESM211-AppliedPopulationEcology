@@ -40,6 +40,7 @@ library(broom)
 This figure shows a pattern of clumped dispersion, in which individuals of a population are clustered in groups.
 
 1. The high-density patches could be in areas of suitable habitat. For an animal population, the high-density patches might be locations of abundant food or safety from predators. For a plant population, the high-density patches might be or areas of optimal soil nutrients, water, and sunlight. Depending on how suitable habitat patches increase, decrease, or move spatially, the species would be expected to follow this pattern.
+<<<<<<< HEAD
 
 2. For plants, it could be a plant species that spreads outward from itself, or drops its seeds straight to the ground, rather than its seeds being dispersed more widely. This type of plant species would remain in clusters. In this situation, the location of these patches would be expected to be consistent from year to year.
 
@@ -104,7 +105,7 @@ Eureka dune grass (Swallenia alexandrae), a rare bunchgrass that only grows on t
 
 &nbsp;
 
-##Yellowstone grizzly bears
+###Yellowstone grizzly bears
 
 ####6. Open the file, and look at the data from 1959 to 1968. Did the grizzly bear population decline over this period? Support your conclusion with graphs, statistics, and logical reasoning.
 
@@ -358,4 +359,4 @@ grizzly1978_1997_graph
 
 ####9. Write a short paragraph to the park superintendent describing your conclusions on the effects (if any) of the dump closures on the grizzly bear population.
 
-During the 10 years prior to the dump closures, the grizzly bear population in Yellowstone National Park was declining at a statistically significant rate. During the 10 years following the first dump closures in 1968, the grizzly bear population continued to significantly decline, although at a slightly slower rate than before the dump closures. However, after 1978, 10 years after dump closures were implemented, the grizzly bear population has significantly increased. There could be a few reasons for these trends in grizzly bear population abundance. 
+During the 10 years prior to the dump closures, the grizzly bear population in Yellowstone National Park was declining at a statistically significant rate. During the 10 years following the first dump closures in 1968, the grizzly bear population continued to significantly decline, although at a slightly slower rate than before the dump closures. However, after 1978, 10 years after dump closures were implemented, the grizzly bear population has significantly increased. There could be a few reasons for these trends in grizzly bear population abundance.
