@@ -8,6 +8,18 @@ output:
     theme: cosmo
 ---
 
+<style>
+h1.title{
+    text-align: center
+  }
+h4.author{
+    text-align: center
+  }
+h4.date{
+    text-align: center
+  }
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -15,19 +27,31 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r packages, include=FALSE}
 
 # Load necessary packages
-library(tidyverse)
+suppressMessages(library(tidyverse))
+library(broom)
 
 ```
 
 &nbsp;
 &nbsp;
-####1. 
 
-###**Eureka dune grass**
+####1. Give three reasons why a plant or animal might be patchily distributed like this. For each, describe whether you would expect the location of the high-density patches to be consistent from year to year.
 
-####2.
+This figure shows a pattern of clumped dispersion, in which individuals of a population are clustered in groups.
 
-```{r swalleniadata, include=FALSE}
+1. The high-density patches could be in areas of suitable habitat. For an animal population, the high-density patches might be locations of abundant food or safety from predators. For a plant population, the high-density patches might be or areas of optimal soil nutrients, water, and sunlight. Depending on how suitable habitat patches increase, decrease, or move spatially, the species would be expected to follow this pattern.
+
+2. For plants, it could be a plant species that spreads outward from itself, or drops its seeds straight to the ground, rather than its seeds being dispersed more widely. This type of plant species would remain in clusters. In this situation, the location of these patches would be expected to be consistent from year to year.
+
+3. For animals, it could be an animal species that lives in groups, such as herds of elephants. For this situation, whether the location of these patches remains consistent from year to year depends on the reason for the animals groups’ locations. For example, if they are grouped in areas of high food availability, location constancy depends on whether those areas remain rich in food or not.
+
+&nbsp;
+
+##Eureka dune grass
+
+####2. Read in the data, and use a two-sample t-test (e.g., using t.test() in R) to assess whether and how mean abundance changed from 2009 to 2010. Choose a level for α, and justify your choice. On the basis of this analysis, what do you conclude about the change in the grass’s abundance?
+
+```{r swallenia_t.test}
 
 # Read in data for Eureka dune grass (Swallenia alexandrae) on Saline Dune
 swallenia <- read.csv("Swallenia.csv")
@@ -37,35 +61,54 @@ swallenia_t <- t.test(swallenia$count_2009, swallenia$count_2010, var.equal = TR
 
 swallenia_t
 
+# Null hypothesis: true difference in means is equal to 0
+# Alternative hypothesis: true difference in means is not equal to 0
+# Since p > alpha (0.42 > 0.05), we retain the null hypothesis
+
 ```
 
-A significance level of 0.05 was chosen for $\alpha$ because it indicates a 5% risk of concluding a difference in mean abundance exists, when there actually is no difference in mean abundance of Eureka dune grass between the two years. There is a 0.05 probability that a Type I error will be committed (the null hypothesis is true, and we reject it). A significance level of 0.05 is common in hypothesis testing.
+A significance level of 0.05 was chosen for $\alpha$ because it indicates a 5% risk of concluding a difference in mean abundance exists, when there actually is no difference in mean abundance of Eureka dune grass between the two years. There is a 0.05 probability that a Type I error will be committed (the null hypothesis is true, and we reject it). Due to this low risk in committing a Type I error, a significance level of 0.05 is common in hypothesis testing, especially for a two-tailed t-test. It is also the default significance level used in the t.test function in R.
 
 Eureka dune grass mean abundance on Saline Dune between 2009 and 2010 did not differ significantly (p = `r round(swallenia_t$p.value, 2)`, $\alpha$ = 0.05). 
 
-####3.
+&nbsp;
 
-```{r}
+####3. Because the plant was counted in the same plots each year, you can also do a paired t-test (R hint: use paired = TRUE in t.test()). On the basis of this analysis, what do you conclude about the change in the grass’s abundance?
+
+```{r swallenia_paired}
 
 # Do a paired t-test
 swallenia_tpaired <- t.test(swallenia$count_2009, swallenia$count_2010, paired = TRUE)
 
 swallenia_tpaired
 
+# Null hypothesis: true difference in means is equal to 0
+# Alternative hypothesis: true difference in means is not equal to 0
+# Since p < alpha (0.03 < 0.05), we reject the null hypothesis
+
 ```
 
-The true difference in means between Eureka dune grass abundance on Saline Dune between 2009 and 2010 is not equal to 0; therefore, the change in abundance differed significantly (p = `r round(swallenia_tpaired$p.value, 2)`, $\alpha$ = 0.05).
+The true difference in means between Eureka dune grass abundance on Saline Dune between 2009 and 2010 is not equal to 0; therefore, the change in abundance between the two years differed significantly (p = `r round(swallenia_tpaired$p.value, 2)`, $\alpha$ = 0.05).
 
-####4. The paired t-test (second analyses) is more appropriate because there is a one-to-one relationship between values in the two Eureka dune grass samples from 2009 and 2010. Since plants were counted in 11 quadrats across the dune, the counts were from the same locations between 2009 and 2010. Since Eureka dune grass spreads outward from itself, it likely exhibits clumped dispersion, and so the quadrats can be expected to capture plant abundance year to year.
+&nbsp;
 
-####5. 
+####4. Which of these analyses is more appropriate? Why? (Hint: think about your answers to question 1, and whether any apply here)
 
+The paired t-test analysis is more appropriate because there is a one-to-one relationship between values in the two Eureka dune grass samples from 2009 and 2010. Since plants were counted in the same 11 quadrats across the dune, the counts were from the same locations each year data were collected. This makes sense since Eureka dune grass spreads outward from itself and likely exhibits clumped dispersion; therefore, the quadrats can be expected to capture any changes in plant abundance year to year.
 
-###**Yellowstone grizzly bears**
+&nbsp;
 
-####6. 
+####5. Write a short paragraph to the park superintendent describing your finding about the changes (if any) to the dune grass population.
 
-```{r grizzlydata}
+Eureka dune grass (Swallenia alexandrae), a rare bunchgrass that only grows on three sand dunes in Death Valley National Park, was counted in 11 quadrats across the dune in 2009 and 2010. The data for one of these dunes (Saline Dune) was analyzed to evaluate whether there was a change in Eureka dune grass population between the two years. A statistically significant change in Eureka dune grass abundance was found between 2009 and 2010 on Saline Dune. However, more analysis is necessary to determine whether the population of Eureka dune grass on Saline Dune is increasing or decreasing.
+
+&nbsp;
+
+##Yellowstone grizzly bears
+
+####6. Open the file, and look at the data from 1959 to 1968. Did the grizzly bear population decline over this period? Support your conclusion with graphs, statistics, and logical reasoning.
+
+```{r grizzlydata_1959-1968}
 
 # Read in grizzly data
 grizzlydata <- read.csv("grizzlydata.csv")
@@ -83,53 +126,53 @@ grizzly1959_1968_summarize <- grizzly1959_1968 %>%
     samplesize1959_1968 = length(N), # Sample size = 10
   )
 
-# Create exploratory histogram
-grizzly1959_1968_hist <- ggplot(grizzly1959_1968, aes(x = N)) + 
-  geom_histogram(bins = 10) +
-    scale_x_continuous(expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
-    theme_classic() +
-    theme(text = element_text(family = "Times New Roman")) +
-    theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
-    theme(legend.position="none") +
-    theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank(),
-        panel.border = element_blank(),
-        axis.line = element_line(colour = "black"))
-
-grizzly1959_1968_hist
-
-# Create exploratory quantile quantile plot
-grizzly1959_1968_qq <- ggplot(grizzly1959_1968, aes(sample = N)) + 
-  geom_qq() +
-  theme_classic() +
-  theme(legend.position="none") +
-  theme(text = element_text(family = "Times New Roman")) +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
-
-grizzly1959_1968_qq
-
 # Create exploratory scatterplot
 gg_grizzly1959_1968 <- ggplot(grizzly1959_1968, aes(x = Year, y = N)) +
   geom_point()
 
 gg_grizzly1959_1968
-# Overall, it looks like the trend is generally a negative linear relationship. However, it seems the population was relatively stable from 1959 to 1965, but it drastically declined after 1965.
+# It looks like the trend is generally a negative linear relationship. However, it seems the population was relatively stable from 1959 to 1965, but it drastically declined after 1965. Overall though, it looks like a linear relationship between grizzly bear population and year makes sense.
 
-# Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
-grizzly1959_1968_model <- lm(N ~ Year, data = grizzly1959_1968)
+# Run linear regression model to describe the trend in grizzly bear population from 1959 - 1968
+grizzly1959_1968_lm <- lm(N ~ Year, data = grizzly1959_1968)
 
-grizzly1959_1968_model
-# y = 1543 - 0.76x
-# Grizzly population = 1543 - 0.76(Year)
-
-# View model diagnostics
-par(mfrow = c(2,2))
-plot(grizzly1959_1968_model)
+grizzly1959_1968_lm
+# y = -0.7636x + 1543
+# Grizzly population = -0.7636(Year) + 1543
 
 # Explore model fit and signifiance
-summary(grizzly1959_1968_model)
+summary(grizzly1959_1968_lm)
+
+# Get model outputs in table form
+grizzly1959_1968_lm_tidy <- broom::tidy(grizzly1959_1968_lm)
+grizzly1959_1968_lm_tidy
+
+# Get the intercept:
+grizzly1959_1968_int <- grizzly1959_1968_lm_tidy$estimate[1]
+grizzly1959_1968_int
+# 1543
+
+# Get the Year coefficient:
+grizzly1959_1968_coef <- grizzly1959_1968_lm_tidy$estimate[2]
+grizzly1959_1968_coef
+# -0.7636
+
+# Metrics at a glance:
+grizzly1959_1968_lm_out <- broom::glance(grizzly1959_1968_lm)
+grizzly1959_1968_lm_out
+
+# Check diagnostic plots
+plot(grizzly1959_1968_lm)
+
+# Find Pearson's r for correlation:
+grizzly1959_1968_cor <- cor.test(grizzly1959_1968$N, grizzly1959_1968$Year)
+grizzly1959_1968_cor
+# r = -0.7462 (strong negative correlation)
+# Correlation is significantly non-zero (p = 0.01 < 0.05)
+
+```
+
+```{r grizzlygraph1}
 
 # Prepare final graph of the linear regression model with the original data, model, and 95% confidence interval for predictions
 grizzly1959_1968_graph <- ggplot(grizzly1959_1968, aes(x = Year, y = N)) +
@@ -137,16 +180,27 @@ grizzly1959_1968_graph <- ggplot(grizzly1959_1968, aes(x = Year, y = N)) +
   geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
   theme_bw() +
   scale_x_continuous(expand = c(0,0), limits = c(1958, 1969)) +
-  labs(x = "Year", y = "Yellowstone Grizzly Bear Population")
+  labs(x = "Year", y = "Yellowstone Population of Female Grizzly Bears with Cubs")
 
 grizzly1959_1968_graph
 
 ```
 
+Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1959 and 1968. 
 
-####7. 
+The equation for the linear regression model is $Grizzly~Bear~Population = -0.7636*Year + 1543$.
 
-```{r}
+A significant regression equation was found ($\beta$ = `r round(grizzly1959_1968_coef,3)`, F(`r grizzly1959_1968_lm_out$df`, `r grizzly1959_1968_lm_out$df.residual`) = `r round(grizzly1959_1968_lm_out$statistic,1)`, p = `r round(grizzly1959_1968_lm_out$p.value,2)`, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1959_1968_lm_out$r.squared,3)`. 
+
+There is a strong negative correlation between grizzly bear population and year (*r* = `r round(grizzly1959_1968_cor$estimate,2)`, t(`r grizzly1959_1968_cor$parameter`) = `r round(grizzly1959_1968_cor$statistic,2)`, p = 0.01, $\alpha$ = 0.05). 
+
+Therefore, the grizzly bear population declined from 1959-1968 at an average rate of -0.7636 bears per year.
+
+&nbsp;
+
+####7. Select the data from 1969 to 1978. Did the population continue to decline? Was the decline faster than the period prior to the dump closures?
+
+```{r grizzlydata_1969-1978}
 
 # Filter grizzly data to only include years 1969 - 1978
 grizzly1969_1978 <- grizzlydata %>% 
@@ -160,10 +214,54 @@ gg_grizzly1969_1978
 # Overall, it looks like the trend is generally a negative linear relationship. However, there are some outliers on both ends.
 
 # Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
-grizzly1969_1978_model <- lm(N ~ Year, data = grizzly1969_1978)
+grizzly1969_1978_lm <- lm(N ~ Year, data = grizzly1969_1978)
 
-grizzly1969_1978_model
-# Grizzly population = 1532.38 - 0.76(Year)
+grizzly1969_1978_lm
+# Grizzly population = -0.7576(Year) + 1532.38
+
+# Explore model fit and signifiance
+summary(grizzly1969_1978_lm)
+
+# Get model outputs in table form
+grizzly1969_1978_lm_tidy <- broom::tidy(grizzly1969_1978_lm)
+grizzly1969_1978_lm_tidy
+
+# Get the intercept:
+grizzly1969_1978_int <- grizzly1969_1978_lm_tidy$estimate[1]
+grizzly1969_1978_int
+# 1532.376
+
+# Get the Year coefficient:
+grizzly1969_1978_coef <- grizzly1969_1978_lm_tidy$estimate[2]
+grizzly1969_1978_coef
+# -0.7575758
+
+# Metrics at a glance:
+grizzly1969_1978_lm_out <- broom::glance(grizzly1969_1978_lm)
+grizzly1969_1978_lm_out
+
+# Check diagnostic plots
+plot(grizzly1969_1978_lm)
+
+# Find Pearson's r for correlation:
+grizzly1969_1978_cor <- cor.test(grizzly1969_1978$N, grizzly1969_1978$Year)
+grizzly1969_1978_cor
+# r = -0.701926 (strong negative correlation)
+# Correlation is significantly non-zero (p = 0.02 < 0.05)
+
+```
+
+Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1969 and 1978. 
+
+The equation for the linear regression model is $Grizzly~Bear~Population = -0.7576*Year + 1532$.
+
+A significant regression equation was found ($\beta$ = `r round(grizzly1969_1978_coef,3)`, F(`r grizzly1969_1978_lm_out$df`, `r grizzly1969_1978_lm_out$df.residual`) = `r round(grizzly1969_1978_lm_out$statistic,1)`, p = `r round(grizzly1969_1978_lm_out$p.value,2)`, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1969_1978_lm_out$r.squared,3)`. 
+
+There is a strong negative correlation between grizzly bear population and year (*r* = `r round(grizzly1959_1968_cor$estimate,2)`, t(`r grizzly1959_1968_cor$parameter`) = `r round(grizzly1959_1968_cor$statistic,2)`, p = 0.02, $\alpha$ = 0.05). 
+
+Therefore, the grizzly bear population continued to decline from 1969 to 1978 at an average rate of -0.7576 bears per year. The rate of decline (-0.7576 bears per year) was slightly slower than the period prior to the dump closures (-0.7636 bears per year).
+
+```{r grizzlygraph2}
 
 # Prepare final graph of the linear regression model with the original data, model, and 95% confidence interval for predictions
 grizzly1969_1978_graph <- ggplot(grizzly1969_1978, aes(x = Year, y = N)) +
@@ -171,16 +269,17 @@ grizzly1969_1978_graph <- ggplot(grizzly1969_1978, aes(x = Year, y = N)) +
   geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
   theme_bw() +
   scale_x_continuous(expand = c(0,0), limits = c(1968, 1979)) +
-  labs(x = "Year", y = "Yellowstone Grizzly Bear Population")
+  labs(x = "Year", y = "Yellowstone Population of Female Grizzly Bears with Cubs")
 
 grizzly1969_1978_graph
 
 ```
 
+&nbsp;
 
-####8. 
+####8. Finally look at the data after 1978. Did population size continue to change? What was the direction and magnitude of the trend?
 
-```{r}
+```{r grizzlydata_1978-1997}
 
 # Filter grizzly data to only include years 1978 - 1997
 grizzly1978_1997 <- grizzlydata %>% 
@@ -194,10 +293,54 @@ gg_grizzly1978_1997
 # Overall, it looks like the trend is generally a positive linear relationship.
 
 # Perform linear regression to describe the trend in grizzly bear population from 1959 - 1968
-grizzly1978_1997_model <- lm(N ~ Year, data = grizzly1978_1997)
+grizzly1978_1997_lm <- lm(N ~ Year, data = grizzly1978_1997)
 
-grizzly1978_1997_model
-# Grizzly population = -6043.13 + 3.07(Year)
+grizzly1978_1997_lm
+# Grizzly population = 3.07(Year) - 6043.13
+
+# Explore model fit and significance
+summary(grizzly1978_1997_lm)
+
+# Get model outputs in table form
+grizzly1978_1997_lm_tidy <- broom::tidy(grizzly1978_1997_lm)
+grizzly1978_1997_lm_tidy
+
+# Get the intercept:
+grizzly1978_1997_int <- grizzly1978_1997_lm_tidy$estimate[1]
+grizzly1978_1997_int
+# -6043.126
+
+# Get the Year coefficient:
+grizzly1978_1997_coef <- grizzly1978_1997_lm_tidy$estimate[2]
+grizzly1978_1997_coef
+# 3.069925
+
+# Metrics at a glance:
+grizzly1978_1997_lm_out <- broom::glance(grizzly1978_1997_lm)
+grizzly1978_1997_lm_out
+
+# Check diagnostic plots
+plot(grizzly1978_1997_lm)
+
+# Find Pearson's r for correlation:
+grizzly1978_1997_cor <- cor.test(grizzly1978_1997$N, grizzly1978_1997$Year)
+grizzly1978_1997_cor
+# r = 0.9243827 (strong positive correlation)
+# Correlation is significantly non-zero (p < 0.001 < 0.05)
+
+```
+
+Simple linear regression was used to explore the relationship between grizzly bear population (number of adult females with cubs) and time (years) between 1978 and 1997. 
+
+The equation for the linear regression model is $Grizzly~Bear~Population = 3.07*Year - 6043$.
+
+A significant regression equation was found ($\beta$ = `r round(grizzly1978_1997_coef,3)`, F(`r grizzly1978_1997_lm_out$df`, `r grizzly1978_1997_lm_out$df.residual`) = `r round(grizzly1978_1997_lm_out$statistic,1)`, p < 0.001, $\alpha$ = 0.05) with an R^2^ of `r round(grizzly1978_1997_lm_out$r.squared,3)`. 
+
+There is a strong positive correlation between grizzly bear population and year (*r* = `r round(grizzly1978_1997_cor$estimate,2)`, t(`r grizzly1978_1997_cor$parameter`) = `r round(grizzly1978_1997_cor$statistic,2)`, p < 0.001, $\alpha$ = 0.05). 
+
+Therefore, the grizzly bear population increased from 1978 to 1997 at an average rate of 3.07 bears per year.
+
+```{r grizzlygraph3}
 
 # Prepare final graph of the linear regression model with the original data, model, and 95% confidence interval for predictions
 grizzly1978_1997_graph <- ggplot(grizzly1978_1997, aes(x = Year, y = N)) +
@@ -205,11 +348,14 @@ grizzly1978_1997_graph <- ggplot(grizzly1978_1997, aes(x = Year, y = N)) +
   geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
   theme_bw() +
   scale_x_continuous(expand = c(0,0), limits = c(1977, 1998)) +
-  labs(x = "Year", y = "Yellowstone Grizzly Bear Population")
+  labs(x = "Year", y = "Yellowstone Population of Female Grizzly Bears with Cubs")
 
 grizzly1978_1997_graph
 
 ```
 
+&nbsp;
 
-####9. 
+####9. Write a short paragraph to the park superintendent describing your conclusions on the effects (if any) of the dump closures on the grizzly bear population.
+
+During the 10 years prior to the dump closures, the grizzly bear population in Yellowstone National Park was declining at a statistically significant rate. During the 10 years following the first dump closures in 1968, the grizzly bear population continued to significantly decline, although at a slightly slower rate than before the dump closures. However, after 1978, 10 years after dump closures were implemented, the grizzly bear population has significantly increased. There could be a few reasons for these trends in grizzly bear population abundance. 
