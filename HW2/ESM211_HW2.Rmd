@@ -1,0 +1,197 @@
+---
+title: "ESM 211 - Homework 2"
+author: "Laura Ingulsrud"
+date: "1/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages, include=FALSE}
+
+library(tidyverse)
+library(Deriv)
+
+```
+
+####1. Make a graph of dN/dt vs. N, for particular values of the parameters. Use r = 0.05, K = 2000, P = 4, a = 0.05, and h = 0.2.
+
+```{r}
+
+r <- 0.05
+K <- 2000
+P <- 4
+a <- 0.05
+h <- 0.2
+
+f <- function(N) (r * N) * (1 - N/K) - ((P * a * N)/(1 + (a * h * N))) 
+
+f_plot <- ggplot(data.frame(N = 0:1750), aes(x = N)) +
+  stat_function(fun = f, color = "red") +
+  geom_hline(yintercept = 0) +
+  ylab("dN/dt")
+
+f_plot
+
+```
+
+####2. Based on this graph, how many equilibria are there? Which ones are stable?
+
+There are three equilibria:
+1. Stable equilibrium at (0,0)
+2. Unstable equilibrium at approximately (315, 0)
+3. Stable equilibrium at (1500, 0)
+
+####3. Returning to the full model with arbitrary parameter values (i.e., represented by symbols as in equation 4), is there an equilibrium at N = 0 for all plausible parameter values? For what values of hunter number (P), expressed in terms of the other parameters of the model, is the zero equilibrium locally stable? If your goal is to eliminate the invasive species, what does this tell you about how many hunters you need?
+
+In equation 4, at N = 0, dN/dt (intrinsic population rate) is also 0. Therefore, there is a stable equilibrium at N = 0 for all plausible parameter values. 
+
+```{r}
+
+#what is the derivative of the model equation? gives you the slope (just to double check my calculations)
+dFN <- Deriv(f)
+Simplify(dFN)
+
+```
+
+
+####4. Write down the equation you would need to solve in order to find the value of any non-zero equilibria. If you enjoy doing algebra, you may use the quadratic formula to find the values of N that satisfy this equation, but that is entirely optional (the result is a rather complicated expression!).
+
+$0 = r*N*(1-\frac{N}{k})-P*(\frac{aN}{1 + ahN})$
+
+####5. 
+
+a.
+```{r}
+
+r <- 0.05
+K <- 2000
+P <- 4
+a <- 0.05
+h <- 0.2
+
+f2 <- function(N) (r * N) * (1 - N/K) 
+
+f3 <- function(N) ((P * a * N)/(1 + (a * h * N))) 
+
+f2f3_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
+  stat_function(fun = f2, color = "blue") +
+  stat_function(fun = f3, color = "green") +  
+  geom_hline(yintercept = 0) +
+  ylab("dN/dt")
+
+f2f3_plot
+
+```
+
+#####b. 
+If the hunting rate is greater than the intrinsic growth rate, the population decreases. If the hunting rate is less than the intrinsic growth rate, the population increases. If the hunting rate and intrinsic growth rate are equal, the population doesn't change; it's in equilibrium.
+
+#####c. 
+All three equilibria are at the same values of N as the equilibria in #1 (0, ~315, and 1500).
+
+6. Now make two similar graphs, keeping all the parameters the same but setting P = 1 in one graph and P = 6 in the other. How many equilbria are there in each case, and which are stable?
+
+```{r}
+
+r <- 0.05
+K <- 2000
+P <- 1
+a <- 0.05
+h <- 0.2
+
+f4 <- function(N) (r * N) * (1 - N/K) 
+
+f5 <- function(N) ((P * a * N)/(1 + (a * h * N))) 
+
+f4f5_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
+  stat_function(fun = f4, color = "blue") +
+  stat_function(fun = f5, color = "green") +  
+  geom_hline(yintercept = 0) +
+  ylab("dN/dt")
+
+f4f5_plot
+
+```
+
+There are three equilibria:
+1. Unstable equilibrium at (0,0)
+2. Stable equilibrium at approximately (1900, 5)
+3. Stable equilibrium at (2000, 0)
+
+```{r}
+
+r <- 0.05
+K <- 2000
+P <- 6
+a <- 0.05
+h <- 0.2
+
+f6 <- function(N) (r * N) * (1 - N/K) 
+
+f7 <- function(N) ((P * a * N)/(1 + (a * h * N))) 
+
+f6f7_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
+  stat_function(fun = f6, color = "blue") +
+  stat_function(fun = f7, color = "green") +  
+  geom_hline(yintercept = 0) +
+  ylab("dN/dt")
+
+f6f7_plot
+
+```
+
+There are two equilibria:
+1. Stable equilibrium at (0,0).
+2. Unstable equilbirum at (2000,0).
+
+####7. The situation in problem 5 is an example of bistability, like in the strong Allee effect. It has important management implications.
+
+#####a. What is the domain of attraction of the zero equlibrium (approximately—you can estimate it from the graph) b, What is the domain of attraction of the largest equibrium?
+
+
+
+#####b. If you noticed the arrival of the species soon after it arrived, and initiated control activities when it had reached N = 100 individuals, would you be able to extirpate it with 4 hunters?
+
+Yes, since the hunting rate exceeds the intrinsic growth rate at this point, you would be able to extirpate the species.
+
+#####c. What about if the population was already at carrying capacity when you initiated control activities?
+
+???
+
+####8. It can be instructive to see how the equilibrium values depend on the number of hunters. Here you will make plots of this, using the same parameter values as above. You already know the formula for the zero equilibrium, N∗0; the formulas for the other two are:
+
+#####a. Plot each of the three equilbria as a function of P, for values of P ranging between 0 and 7.
+
+```{r}
+
+#Assigning Values to Variables
+r <- 0.05
+K <- 2000
+a <- 0.05
+h <- 0.2
+d <- 1/(a*h)
+
+f_8 <- function(P) (1/2) * ((K - d) - sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P)))
+
+f_9 <- function(P) (1/2) * ((K - d) + sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P)))
+
+
+#Plotting Function
+function_8_9_graph <-ggplot(data.frame(P = 0:7) , aes(x = P)) +
+stat_function(fun = f_8, color = "red") + stat_function(fun = f_9, color = "blue") +
+  geom_hline(yintercept = 0) +
+  ylab("N")
+
+function_8_9_graph
+
+```
+
+
+#####b. Draw a vertical dotted line where the zero equilbrium changes from locally stable to locally unstable. What else happens at this value of P?
+
+
+#####c. What else can you learn from this graph? What confuses or concerns you about this graph?
+
