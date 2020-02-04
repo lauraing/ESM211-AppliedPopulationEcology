@@ -70,7 +70,7 @@ There are three equilibria:
 
 1. Stable equilibrium at (0,0)
 
-2. Unstable equilibrium at approximately (315, 0)
+2. Unstable equilibrium at approximately (400, 0)
 
 3. Stable equilibrium at (1500, 0)
 
@@ -242,9 +242,9 @@ f9 <- function(P) (1/2) * ((K - d) + sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P))
 
 f8f9_plot <-ggplot(data.frame(P = 0:7) , aes(x = P)) +
 stat_function(fun = f8, color = "red") + stat_function(fun = f9, color = "blue") +
-  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 0, color = "green") +
   geom_vline(xintercept = 1, linetype = "dotted", size = 1) +
-  ylab("N at Equilibrium")
+  ylab("Equilibrium Abundance")
 
 f8f9_plot
 
