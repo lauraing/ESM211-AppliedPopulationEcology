@@ -31,7 +31,10 @@ library(tidyverse)
 
 ```
 
-####1. Make a graph of dN/dt vs. N, for particular values of the parameters. Use r = 0.05, K = 2000, P = 4, a = 0.05, and h = 0.2.
+&nbsp;
+&nbsp;
+
+####**1.** Make a graph of dN/dt vs. N, for particular values of the parameters. Use r = 0.05, K = 2000, P = 4, a = 0.05, and h = 0.2.
 
 The graph below describes the model given in equation 4: 
 
@@ -59,14 +62,21 @@ f_plot
 
 ```
 
-####2. Based on this graph, how many equilibria are there? Which ones are stable?
+&nbsp;
+
+####**2.** Based on this graph, how many equilibria are there? Which ones are stable?
 
 There are three equilibria:
+
 1. Stable equilibrium at (0,0)
+
 2. Unstable equilibrium at approximately (315, 0)
+
 3. Stable equilibrium at (1500, 0)
 
-####3. Returning to the full model with arbitrary parameter values (i.e., represented by symbols as in equation 4), is there an equilibrium at N = 0 for all plausible parameter values? For what values of hunter number (P), expressed in terms of the other parameters of the model, is the zero equilibrium locally stable? If your goal is to eliminate the invasive species, what does this tell you about how many hunters you need?
+&nbsp;
+
+####**3.** Returning to the full model with arbitrary parameter values (i.e., represented by symbols as in equation 4), is there an equilibrium at N = 0 for all plausible parameter values? For what values of hunter number (P), expressed in terms of the other parameters of the model, is the zero equilibrium locally stable? If your goal is to eliminate the invasive species, what does this tell you about how many hunters you need?
 
 In equation 4, at N = 0, $\frac{dN}{dt}$ (intrinsic population rate) is also 0. Therefore, there will always be an equilibrium at N = 0 for all plausible parameter values. To find what values of hunter number (P) the zero equilibrium is locally stable at, we need to first take the derivative of equation 4:
 
@@ -86,14 +96,17 @@ $P > \frac{r}{a}$
 
 Therefore, the zero equilibrium is locally stable for all values of P (hunter number) that are greater than $\frac{r}{a}$ (intrinsic growth rate/per-prey attack rate). If our goal is to eliminate the invasive species, this tells us we need more hunters than the intrinsic growth rate of the invasive population divided by the per-prey attack rate of the hunters. This means the number of hunters has to exceed the value of the invasive species growth rate divided by the rate at which hunters are able to kill the invasive species. P is the management parameter in this situation; if you can ensure P is larger than $\frac{r}{a}$, you will achieve stability at N = 0, meaning the invasive species would be extirpated.
 
+&nbsp;
 
-####4. Write down the equation you would need to solve in order to find the value of any non-zero equilibria. If you enjoy doing algebra, you may use the quadratic formula to find the values of N that satisfy this equation, but that is entirely optional (the result is a rather complicated expression!).
+####**4.** Write down the equation you would need to solve in order to find the value of any non-zero equilibria. If you enjoy doing algebra, you may use the quadratic formula to find the values of N that satisfy this equation, but that is entirely optional (the result is a rather complicated expression!).
 
 $0 = r*N*(1-\frac{N}{k})-P*(\frac{aN}{1 + ahN})$
 
-####5. Because the algebra is tedious, and the result is so complex that it doesn’t give a lot of insight, it’s useful to do some more graphical analysis. In particular, we break the equation into its two component parts, the intrinsic population growth (rN(1 - N/K)) and the hunting ((PaN)/(1 + (ahN))).
+&nbsp;
 
-#####a. Using the same parameters as before, graph both the intrinsic growth rate and hunting rate as functions of N on the same graph.
+####**5.** Because the algebra is tedious, and the result is so complex that it doesn’t give a lot of insight, it’s useful to do some more graphical analysis. In particular, we break the equation into its two component parts, the intrinsic population growth (rN(1 - N/K)) and the hunting ((PaN)/(1 + (ahN))).
+
+#####**a.** Using the same parameters as before, graph both the intrinsic growth rate and hunting rate as functions of N on the same graph.
 ```{r}
 
 # Assign values to parameters of function
@@ -119,15 +132,17 @@ f2f3_plot
 
 ```
 
-#####b. What do you expect will happen to the population when the hunting rate is greater than the intrinsic growth rate? When it is less? When they are equal?
+#####**b.** What do you expect will happen to the population when the hunting rate is greater than the intrinsic growth rate? When it is less? When they are equal?
 
 If the hunting rate is greater than the intrinsic growth rate, the population decreases. If the hunting rate is less than the intrinsic growth rate, the population increases. If the hunting rate and intrinsic growth rate are equal, the population doesn't change; it's in equilibrium.
 
-#####c. How do the patterns you see on this graph relate to the ones in problem 1?
+#####**c.** How do the patterns you see on this graph relate to the ones in problem 1?
 
 All three equilibria are at the same values of N as the equilibria in #1 (0, ~400, and 1500).
 
-####6. Now make two similar graphs, keeping all the parameters the same but setting P = 1 in one graph and P = 6 in the other. How many equilbria are there in each case, and which are stable?
+&nbsp;
+
+####**6.** Now make two similar graphs, keeping all the parameters the same but setting P = 1 in one graph and P = 6 in the other. How many equilbria are there in each case, and which are stable?
 
 ```{r}
 
@@ -155,7 +170,9 @@ f4f5_plot
 ```
 
 For the graph where P = 1, there are two equilibria:
+
 1. Unstable equilibrium at (0,0)
+
 2. Stable equilibrium at approximately (1900, 5)
 
 ```{r}
@@ -185,27 +202,29 @@ f6f7_plot
 
 For the graph where P = 6, there is one stable equilibrium at (0,0).
 
+&nbsp;
 
-####7. The situation in problem 5 is an example of bistability, like in the strong Allee effect. It has important management implications.
+####**7.** The situation in problem 5 is an example of bistability, like in the strong Allee effect. It has important management implications.
 
-#####a. What is the domain of attraction of the zero equlibrium (approximately—you can estimate it from the graph) b, What is the domain of attraction of the largest equibrium?
+#####**a.** What is the domain of attraction of the zero equlibrium (approximately—you can estimate it from the graph) b, What is the domain of attraction of the largest equibrium?
 
 The domain of attraction of the zero equilibrium is any value of N between 0 and approximately 400 (the N value where the hunting rate and intrinsic growth rate first intersect). The domain of attraction of the largest equilibrium, where N = 1500 (the N value where the hunting rate and intrinsic growth rate intersect the second time), is any value of N greater than approximately 400.
 
-#####b. If you noticed the arrival of the species soon after it arrived, and initiated control activities when it had reached N = 100 individuals, would you be able to extirpate it with 4 hunters?
+#####**b.** If you noticed the arrival of the species soon after it arrived, and initiated control activities when it had reached N = 100 individuals, would you be able to extirpate it with 4 hunters?
 
 Yes, since the hunting rate exceeds the intrinsic growth rate at this point, you would be able to extirpate the species.
 
-#####c. What about if the population was already at carrying capacity when you initiated control activities?
+#####**c.** What about if the population was already at carrying capacity when you initiated control activities?
 
 You would be able to drive down the population until N = 1500, but at that point you reach a stable equilibrium and would need to add more hunters so that the hunting rate exceeds the intrinsic growth rate.
 
+&nbsp;
 
-####8. It can be instructive to see how the equilibrium values depend on the number of hunters. Here you will make plots of this, using the same parameter values as above. You already know the formula for the zero equilibrium, N∗0; the formulas for the other two are: N1 = (1/2)((K - d) - sqrt((K-d)^2 + ((4Kd)/(r))(r - aP))) and N2 = (1/2)((K - d) + sqrt((K-d)^2 + ((4Kd)/(r))(r - aP))), where d = 1/(ah) is the half-saturation constant.
+####**8.** It can be instructive to see how the equilibrium values depend on the number of hunters. Here you will make plots of this, using the same parameter values as above. You already know the formula for the zero equilibrium, N∗0; the formulas for the other two are: N1 = (1/2)((K - d) - sqrt((K-d)^2 + ((4Kd)/(r))(r - aP))) and N2 = (1/2)((K - d) + sqrt((K-d)^2 + ((4Kd)/(r))(r - aP))), where d = 1/(ah) is the half-saturation constant.
 
-#####a. Plot each of the three equilbria as a function of P, for values of P ranging between 0 and 7.
+#####**a.** Plot each of the three equilbria as a function of P, for values of P ranging between 0 and 7.
 
-```{r}
+```{r warning=FALSE}
 
 # Assign values to parameters of functions
 r <- 0.05
@@ -214,28 +233,27 @@ a <- 0.05
 h <- 0.2
 d <- 1/(a*h)
 
-# Create function for the equilibrium at N = 400
+# Create function for the equilibrium at N = 400 (N*1)
 f8 <- function(P) (1/2) * ((K - d) - sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P)))
 
-# Create function for the equilibrium at N = 1500
+# Create function for the equilibrium at N = 1500 (N*2)
 f9 <- function(P) (1/2) * ((K - d) + sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P)))
 
 
 f8f9_plot <-ggplot(data.frame(P = 0:7) , aes(x = P)) +
 stat_function(fun = f8, color = "red") + stat_function(fun = f9, color = "blue") +
   geom_hline(yintercept = 0) +
-  geom_vline(xintercept = 1, linetype = "dotted", color = "purple", size = 1) +
-  ylab("N")
+  geom_vline(xintercept = 1, linetype = "dotted", size = 1) +
+  ylab("N at Equilibrium")
 
 f8f9_plot
 
 ```
 
-#####b. Draw a vertical dotted line where the zero equilbrium changes from locally stable to locally unstable. What else happens at this value of P?
+#####**b.** Draw a vertical dotted line where the zero equilbrium changes from locally stable to locally unstable. What else happens at this value of P?
 
-The N*2 equilibrium ???
+The zero equilibrium changes from locally stable to locally unstable at a value of P = 1. At a value of P = 1, the N1 equilibrium is at a value of N = 0 at equilibrium, while the N2 equilibrium is at a value of N = 1900 (approximately) at equilibrium. This corresponds to what we found in #6, where the two equilibria occurred at N = 0 and N = 1900, but in this case, we have three equilibria graphed; two of which occur at N = 0 due to the value of P. At P = 1, as we can see in the first plot in #6, the hunting rate does not exceed the intrinsic population rate until N is approximately 1900; I assume that’s why the graph here shows both the N*1 and zero equilibria with an N value at equilibrium of 0.
 
+#####**c.** What else can you learn from this graph? What confuses or concerns you about this graph?
 
-#####c. What else can you learn from this graph? What confuses or concerns you about this graph?
-
-EVERYTHING CONFUSES ME
+This graph can also tell us that there can be no equilibria after P exceeds approximately 5.5 hunters. This matches up with what we found in #6 when P = 6; since the hunting rate was always greater than the intrinsic growth rate, the only equilibrium was at N = 0, and it was stable, as the higher hunting rate drives the intrinsic growth rate down until the invasive species is extirpated. I am still confused about how many equilibria there are on this graph depending on where P is. Also, I would expect the point where the two N1 and N2 lines cross to be closer to P = 6 rather than P = 5.5. 
