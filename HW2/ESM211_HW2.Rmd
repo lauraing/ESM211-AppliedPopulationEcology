@@ -1,9 +1,24 @@
 ---
 title: "ESM 211 - Homework 2"
 author: "Laura Ingulsrud"
-date: "1/29/2020"
-output: html_document
+date: "February 3, 2020"
+output:
+  html_document:
+    df_print: paged
+    theme: cosmo
 ---
+
+<style>
+h1.title{
+    text-align: center
+  }
+h4.author{
+    text-align: center
+  }
+h4.date{
+    text-align: center
+  }
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -11,22 +26,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r packages, include=FALSE}
 
+# Load necessary packages
 library(tidyverse)
 
 ```
 
 ####1. Make a graph of dN/dt vs. N, for particular values of the parameters. Use r = 0.05, K = 2000, P = 4, a = 0.05, and h = 0.2.
 
+The graph below describes the model given in equation 4: 
+
+$f(N) = \frac{dN}{dt} = rN(1-\frac{N}{K}) - P(\frac{aN}{1 + ahN})$
+
 ```{r}
 
+# Assign values to parameters of function
 r <- 0.05
 K <- 2000
 P <- 4
 a <- 0.05
 h <- 0.2
 
+# Create function using the model given
 f <- function(N) (r * N) * (1 - N/K) - ((P * a * N)/(1 + (a * h * N))) 
 
+# Plot the function
 f_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
   stat_function(fun = f, color = "purple") +
   geom_hline(yintercept = 0) +
@@ -45,25 +68,45 @@ There are three equilibria:
 
 ####3. Returning to the full model with arbitrary parameter values (i.e., represented by symbols as in equation 4), is there an equilibrium at N = 0 for all plausible parameter values? For what values of hunter number (P), expressed in terms of the other parameters of the model, is the zero equilibrium locally stable? If your goal is to eliminate the invasive species, what does this tell you about how many hunters you need?
 
-In equation 4, at N = 0, dN/dt (intrinsic population rate) is also 0. Therefore, there is a stable equilibrium at N = 0 for all plausible parameter values. 
+In equation 4, at N = 0, $\frac{dN}{dt}$ (intrinsic population rate) is also 0. Therefore, there will always be an equilibrium at N = 0 for all plausible parameter values. To find what values of hunter number (P) the zero equilibrium is locally stable at, we need to first take the derivative of equation 4:
+
+$\frac{df(N)}{dN} = rN(1-\frac{2N}{K}) - P(\frac{a}{(1 + ahN)^2})$  
+
+To find out what values of P we need to make the zero equilibrium locally stable, we then need to plug in N = 0 to the derived equation:
+
+$\frac{df(N)}{dN} = r-P*a$  
+
+The zero equilibrium is locally stable when the population number (N) moves toward N = 0. Therefore, the equation we found above needs to be less than 0:
+
+$0 > r-P*a$
+
+We need to finally solve for P to find the values that the zero equilibrium is locally stable at:
+
+$P > \frac{r}{a}$
+
+Therefore, the zero equilibrium is locally stable for all values of P (hunter number) that are greater than $\frac{r}{a}$ (intrinsic growth rate/per-prey attack rate). If our goal is to eliminate the invasive species, this tells us we need more hunters than the intrinsic growth rate of the invasive population divided by the per-prey attack rate of the hunters. This means the number of hunters has to exceed the value of the invasive species growth rate divided by the rate at which hunters are able to kill the invasive species. P is the management parameter in this situation; if you can ensure P is larger than $\frac{r}{a}$, you will achieve stability at N = 0, meaning the invasive species would be extirpated.
+
 
 ####4. Write down the equation you would need to solve in order to find the value of any non-zero equilibria. If you enjoy doing algebra, you may use the quadratic formula to find the values of N that satisfy this equation, but that is entirely optional (the result is a rather complicated expression!).
 
 $0 = r*N*(1-\frac{N}{k})-P*(\frac{aN}{1 + ahN})$
 
-####5. 
+####5. Because the algebra is tedious, and the result is so complex that it doesn’t give a lot of insight, it’s useful to do some more graphical analysis. In particular, we break the equation into its two component parts, the intrinsic population growth (rN(1 - N/K)) and the hunting ((PaN)/(1 + (ahN))).
 
-a.
+#####a. Using the same parameters as before, graph both the intrinsic growth rate and hunting rate as functions of N on the same graph.
 ```{r}
 
+# Assign values to parameters of function
 r <- 0.05
 K <- 2000
 P <- 4
 a <- 0.05
 h <- 0.2
 
+# Create function for the intrinsic population growth rate
 f2 <- function(N) (r * N) * (1 - N/K) 
 
+# Create function for the hunting rate
 f3 <- function(N) ((P * a * N)/(1 + (a * h * N))) 
 
 f2f3_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
@@ -76,24 +119,29 @@ f2f3_plot
 
 ```
 
-#####b. 
+#####b. What do you expect will happen to the population when the hunting rate is greater than the intrinsic growth rate? When it is less? When they are equal?
+
 If the hunting rate is greater than the intrinsic growth rate, the population decreases. If the hunting rate is less than the intrinsic growth rate, the population increases. If the hunting rate and intrinsic growth rate are equal, the population doesn't change; it's in equilibrium.
 
-#####c. 
+#####c. How do the patterns you see on this graph relate to the ones in problem 1?
+
 All three equilibria are at the same values of N as the equilibria in #1 (0, ~400, and 1500).
 
-6. Now make two similar graphs, keeping all the parameters the same but setting P = 1 in one graph and P = 6 in the other. How many equilbria are there in each case, and which are stable?
+####6. Now make two similar graphs, keeping all the parameters the same but setting P = 1 in one graph and P = 6 in the other. How many equilbria are there in each case, and which are stable?
 
 ```{r}
 
+# Assign values to parameters of function
 r <- 0.05
 K <- 2000
 P <- 1
 a <- 0.05
 h <- 0.2
 
+# Create function for the intrinsic population growth rate
 f4 <- function(N) (r * N) * (1 - N/K) 
 
+# Create function for the hunting rate
 f5 <- function(N) ((P * a * N)/(1 + (a * h * N))) 
 
 f4f5_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
@@ -106,20 +154,23 @@ f4f5_plot
 
 ```
 
-There are two equilibria:
+For the graph where P = 1, there are two equilibria:
 1. Unstable equilibrium at (0,0)
 2. Stable equilibrium at approximately (1900, 5)
 
 ```{r}
 
+# Assign values to parameters of function
 r <- 0.05
 K <- 2000
 P <- 6
 a <- 0.05
 h <- 0.2
 
+# Create function for the intrinsic population growth rate
 f6 <- function(N) (r * N) * (1 - N/K) 
 
+# Create function for the hunting rate
 f7 <- function(N) ((P * a * N)/(1 + (a * h * N))) 
 
 f6f7_plot <- ggplot(data.frame(N = 0:2000), aes(x = N)) +
@@ -132,7 +183,8 @@ f6f7_plot
 
 ```
 
-There is one stable equilibrium at (0,0).
+For the graph where P = 6, there is one stable equilibrium at (0,0).
+
 
 ####7. The situation in problem 5 is an example of bistability, like in the strong Allee effect. It has important management implications.
 
@@ -148,20 +200,24 @@ Yes, since the hunting rate exceeds the intrinsic growth rate at this point, you
 
 You would be able to drive down the population until N = 1500, but at that point you reach a stable equilibrium and would need to add more hunters so that the hunting rate exceeds the intrinsic growth rate.
 
-####8. It can be instructive to see how the equilibrium values depend on the number of hunters. Here you will make plots of this, using the same parameter values as above. You already know the formula for the zero equilibrium, N∗0; the formulas for the other two are:
+
+####8. It can be instructive to see how the equilibrium values depend on the number of hunters. Here you will make plots of this, using the same parameter values as above. You already know the formula for the zero equilibrium, N∗0; the formulas for the other two are: N1 = (1/2)((K - d) - sqrt((K-d)^2 + ((4Kd)/(r))(r - aP))) and N2 = (1/2)((K - d) + sqrt((K-d)^2 + ((4Kd)/(r))(r - aP))), where d = 1/(ah) is the half-saturation constant.
 
 #####a. Plot each of the three equilbria as a function of P, for values of P ranging between 0 and 7.
 
 ```{r}
 
+# Assign values to parameters of functions
 r <- 0.05
 K <- 2000
 a <- 0.05
 h <- 0.2
 d <- 1/(a*h)
 
+# Create function for the equilibrium at N = 400
 f8 <- function(P) (1/2) * ((K - d) - sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P)))
 
+# Create function for the equilibrium at N = 1500
 f9 <- function(P) (1/2) * ((K - d) + sqrt((K-d)^2 + ((4*K*d)/(r)) * (r - a * P)))
 
 
@@ -175,12 +231,11 @@ f8f9_plot
 
 ```
 
-
 #####b. Draw a vertical dotted line where the zero equilbrium changes from locally stable to locally unstable. What else happens at this value of P?
 
-At P = 1, the equilibrium becomes unstable. This is because before there are any hunters (1 or fewer hunters), there does not exist a non-zero equilibrium that is different than K because there is not enough hunting pressure to control the population below the carrying capacity. At this value of P, there also come to exist 3 equilibria (where N = 0) rather than two, which changes the domain of attraction for equilibria at N = 0.
+The N*2 equilibrium ???
+
 
 #####c. What else can you learn from this graph? What confuses or concerns you about this graph?
 
-This graph tells us that after a certain number of hunters, all hunting at the given rate "a", there is no other equilibrium than zero because the hunting pressure exceeds the population growth rate for every value of N. Looking at the first graph created, increasing P to 6 shows the population as always negative. That is reflected this graph as well, as the equilibrium does not exist for either after ~P = 5.5. 
-
+EVERYTHING CONFUSES ME
